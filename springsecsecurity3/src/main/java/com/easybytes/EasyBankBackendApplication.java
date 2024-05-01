@@ -1,8 +1,7 @@
-package com.easybytes.springsecsecurity2;
+package com.easybytes;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 public class EasyBankBackendApplication {

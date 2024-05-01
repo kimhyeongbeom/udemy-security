@@ -1,4 +1,4 @@
-package com.easybytes.springsecsecurity2;
+package com.easybytes;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
