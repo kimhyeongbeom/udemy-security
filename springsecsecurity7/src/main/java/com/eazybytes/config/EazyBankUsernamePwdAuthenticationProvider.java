@@ -1,5 +1,6 @@
 package com.eazybytes.config;
 
+import com.eazybytes.model.Authority;
 import com.eazybytes.model.Customer;
 import com.eazybytes.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -31,15 +33,21 @@ public class EazyBankUsernamePwdAuthenticationProvider implements Authentication
         if (!customers.isEmpty()) {
             Customer customer = customers.get(0);
             if (passwordEncoder.matches(password, customer.getPwd())) {
-                List<GrantedAuthority> authorities = new ArrayList<>();
-                authorities.add(new SimpleGrantedAuthority(customer.getRole()));
-                return new UsernamePasswordAuthenticationToken(username, password, authorities);
+                return new UsernamePasswordAuthenticationToken(username, password, getGrantedAuthorities( customer.getAuthorities() ));
             } else {
                 throw new BadCredentialsException("Password does not match");
             }
         } else {
             throw new BadCredentialsException("User not found : " + username);
         }
+    }
+
+    private List<GrantedAuthority> getGrantedAuthorities(Set<Authority> authorities) {
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        for (Authority authority : authorities) {
+            grantedAuthorities.add(new SimpleGrantedAuthority(authority.getName()));
+        }
+        return grantedAuthorities;
     }
 
     @Override
