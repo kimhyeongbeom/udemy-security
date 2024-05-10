@@ -1,9 +1,11 @@
 package com.eazybytes.config;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import com.eazybytes.filter.AuthoritiesLoggingAfterFilter;
 import com.eazybytes.filter.AuthoritiesLoggingAtFilter;
+import com.eazybytes.filter.JWTTokenGeneratorFilter;
 import com.eazybytes.filter.RequestValidationBeforeFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,15 +29,14 @@ public class ProjectSecurityConfig {
         CsrfTokenRequestAttributeHandler csrfTokenHandler = new CsrfTokenRequestAttributeHandler();
         csrfTokenHandler.setCsrfRequestAttributeName("_csrf");
 
-        http.securityContext((context) -> context
-                        .requireExplicitSave(false))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) )
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
                     config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
                     config.setAllowedMethods(Collections.singletonList("*"));
                     config.setAllowCredentials(true);
                     config.setAllowedHeaders(Collections.singletonList("*"));
+                    config.setExposedHeaders(Arrays.asList("Authorization"));
                     config.setMaxAge(3600L);
                     return config;
                 }))
@@ -44,6 +45,7 @@ public class ProjectSecurityConfig {
                 .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
                 .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
                 .addFilterAt(new AuthoritiesLoggingAtFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new JWTTokenGeneratorFilter(), AuthoritiesLoggingAtFilter.class)
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/myAccount").hasRole("USER")
                         .requestMatchers("/myBalance").hasAnyRole("USER","ADMIN")
