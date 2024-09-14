@@ -21,8 +21,7 @@ public class ProjectSecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeHttpRequests((requests) -> requests
+        http.authorizeRequests((requests) -> requests
                 .requestMatchers("/myAccount", "/myBalance", "/myLoans", "myCards").authenticated()
                 .requestMatchers("/contact", "/notices", "/register").permitAll() )
         .formLogin(withDefaults())
@@ -32,30 +31,35 @@ public class ProjectSecurityConfig {
 
 //    @Bean
 //    public InMemoryUserDetailsManager userDetailsService() {
-///*
-//        UserDetails admin = User.withDefaultPasswordEncoder()
-//                .username("admin")
-//                .password("12345")
-//                .roles("ADMIN")
-//                .build();
 //
-//        UserDetails user = User.withDefaultPasswordEncoder()
-//                .username("user")
-//                .password("12345")
-//                .roles("READ")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(admin, user); */
-//
-////        UserDetails admin = User.withUsername("admin").password("12345").roles("ADMIN").build();
-////        UserDetails user = User.withUsername("user").password("12345").roles("READ").build();
+////        UserDetails admin = User.withDefaultPasswordEncoder()
+////                .username("admin")
+////                .password("12345")
+////                .roles("ADMIN")
+////                .build();
+////
+////        UserDetails user = User.withDefaultPasswordEncoder()
+////                .username("user")
+////                .password("12345")
+////                .roles("READ")
+////                .build();
+////
 ////        return new InMemoryUserDetailsManager(admin, user);
+//
+//        UserDetails admin = User.withUsername("admin").password("12345").roles("ADMIN").build();
+//        UserDetails user = User.withUsername("user").password("12345").roles("READ").build();
+//        return new InMemoryUserDetailsManager(admin, user);
 //    }
 //
 //    @Bean
 //    public UserDetailsService userDetailsService(DataSource dataSource) {
 //        return new JdbcUserDetailsManager(dataSource);
 //    }
+
+    @Bean
+    public UserDetailsService userDetailsService(DataSource dataSource) {
+        return new JdbcUserDetailsManager(dataSource);
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
