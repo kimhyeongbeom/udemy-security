@@ -3,6 +3,7 @@ package com.easybytes.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,7 +22,8 @@ public class ProjectSecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests((requests) -> requests
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeRequests((requests) -> requests
                 .requestMatchers("/myAccount", "/myBalance", "/myLoans", "myCards").authenticated()
                 .requestMatchers("/contact", "/notices", "/register").permitAll() )
         .formLogin(withDefaults())
@@ -56,10 +58,10 @@ public class ProjectSecurityConfig {
 //        return new JdbcUserDetailsManager(dataSource);
 //    }
 
-    @Bean
-    public UserDetailsService userDetailsService(DataSource dataSource) {
-        return new JdbcUserDetailsManager(dataSource);
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService(DataSource dataSource) {
+//        return new JdbcUserDetailsManager(dataSource);
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
