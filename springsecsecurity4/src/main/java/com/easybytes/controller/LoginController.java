@@ -22,8 +22,8 @@ public class LoginController {
         ResponseEntity response = null;
 
         try {
-            String password = passwordEncoder.encode(customer.getPwd());
-            customer.setPwd(password);
+            String hashPwd = passwordEncoder.encode(customer.getPwd());
+            customer.setPwd(hashPwd);
             
             savedCustomer = customerRepository.save(customer);
             if (savedCustomer.getId() > 0 ) {
