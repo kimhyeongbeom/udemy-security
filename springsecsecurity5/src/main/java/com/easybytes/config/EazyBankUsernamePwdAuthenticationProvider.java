@@ -3,6 +3,7 @@ package com.easybytes.config;
 import com.easybytes.model.Customer;
 import com.easybytes.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +22,8 @@ import java.util.List;
 public class EazyBankUsernamePwdAuthenticationProvider implements AuthenticationProvider {
 
     private final CustomerRepository customerRepository;
+
+    @Qualifier("passwordEncoder")
     private final PasswordEncoder passwordEncoder;
 
     @Override
