@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 public class AuthoritiesLoggingAfterFilter implements Filter {
-
     private final Logger LOG =
             Logger.getLogger(AuthoritiesLoggingAfterFilter.class.getName());
 
@@ -23,5 +22,4 @@ public class AuthoritiesLoggingAfterFilter implements Filter {
         }
         chain.doFilter(request, response);
     }
-
 }
